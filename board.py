@@ -1,19 +1,17 @@
-SIZE = 8
-
-
-def initial_board():
-    board = [["."] * SIZE for _ in range(SIZE)]
-    for r in range(3):
-        for c in range(SIZE):
-            if (r + c) % 2 == 1:
-                board[r][c] = "B"
-    for r in range(5, 8):
-        for c in range(SIZE):
-            if (r + c) % 2 == 1:
-                board[r][c] = "R"
-    return board
-
 
 def move_piece(board, start, end):
-    board[end[0]][end[1]] = board[start[0]][start[1]]
-    board[start[0]][start[1]] = "."
+    sr, sc = start
+    er, ec = end
+
+    # Remember the moving piece.
+    piece = board[sr][sc]
+
+    # Remove the jumped opponent during a capture.
+    if abs(er - sr) == 2 and abs(ec - sc) == 2:
+        mr = (sr + er) // 2
+        mc = (sc + ec) // 2
+        board[mr][mc] = "."
+
+    # Move the piece and clear its original square.
+    board[er][ec] = piece
+    board[sr][sc] = "."
